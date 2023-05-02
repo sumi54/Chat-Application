@@ -18,12 +18,14 @@ import TheWelcome from './components/TheWelcome.vue'
 import chatApp from './components/chat.vue';
 import menuApp from './components/menu.vue';
 import chatListApp from './components/chatList.vue';
+
 export default{
   components:{
     chatApp,
     menuApp,
     chatListApp
-  }
+  },
+ 
 }
 </script>
 <style scoped>
