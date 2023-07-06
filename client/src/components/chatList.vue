@@ -6,18 +6,18 @@
               <input type="text" placeholder="Search...">
             </div>
           </div>
-          <div class="discussion message-active">
+          <div class="discussion message-active" v-for="user in activeUsers" :key="user.id">
             <div class="photo" style="background-image: url(https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);">
               <div class="online"></div>
             </div>
-            <div class="desc-contact">
-              <p class="name">Megan Leib</p>
+            <div class="desc-contact" >
+              <p class="name">{{ user.name }}</p>
               <p class="message">9 pm at the bar if possible 😳</p>
             </div>
             <div class="timer">12 sec</div>
           </div>
-  
-          <div class="discussion">
+          <!-- <div v-for="fil in filter" :key="fil.id">{{ fil }}</div> -->
+          <!-- <div class="discussion">
             <div class="photo" style="background-image: url(https://i.pinimg.com/originals/a9/26/52/a926525d966c9479c18d3b4f8e64b434.jpg);">
               <div class="online"></div>
             </div>
@@ -78,11 +78,45 @@
               <p class="message">You can't see me</p>
             </div>
             <div class="timer">1 week</div>
-          </div>
+          </div> -->
         </section>
 </template>
 <script>
+import { socket } from "../socket";
+import {mapState,mapStores} from 'pinia'
+import {useChatStore} from '../stores/chatStore'
+import { useTransitionState } from 'vue';
 export default{
-    
+    data(){
+      return{
+        nameArray:[],
+        filter:[]
+      }
+    },
+    computed:{
+      ...mapStores(useChatStore),
+      activeUsers(){
+        return this.chatStore.getActiveUsers;
+      }
+      
+    },
+    mounted(){
+      // socket.on("userId",user=>{
+      // this.userInfo.onlineUsers.push(user);
+      // });
+
+      // this.nameArray.push(this.chatStore.getUsers)
+
+      // socket.on("nameList",(users)=>{
+      //     this.chatStore.onlineUsers=users
+      // })
+      socket.on("nameList",(users)=>{
+        this.chatStore.onlineusers = users.filter(user => user.id != this.chatStore.id);
+      })
+      
+
+      this.filter.push(this.chatStore.filteredOnlineUsers)
+
+    }
 }
 </script>

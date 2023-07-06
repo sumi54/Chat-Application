@@ -33,6 +33,7 @@ body {
     height: 70px;
     border-bottom: 1px solid #6780cc;
     display:flex;
+    
     justify-content: center;
     align-items: center;
     color: #9fb5ef;
@@ -49,7 +50,7 @@ body {
     background-color: #4f6ebd;
     color: #cfe5ff;
   }
-  
+
   /* === CONVERSATIONS === */
   
   .discussions {
@@ -88,6 +89,7 @@ body {
     display:flex;
     align-items: center;
     cursor: pointer;
+    
   }
   
   .discussions .search .searchbar input {
@@ -95,7 +97,8 @@ body {
     height:38px;
     width:100%;
     border:none;
-    font-family: 'Montserrat', sans-serif;;
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 0;
   }
   
   .discussions .search .searchbar *::-webkit-input-placeholder {
@@ -177,6 +180,7 @@ body {
   
   .chat {
     width: calc(65% - 85px);
+    margin-top: 0;
   }
   
   .header-chat {
@@ -184,6 +188,7 @@ body {
     height: 90px;
     box-shadow: 0px 3px 2px rgba(0,0,0,0.100);
     display:flex;
+    margin-top: 0;
     align-items: center;
   }
   
@@ -273,7 +278,6 @@ body {
     bottom: 0;
     background-color: transparent;
     border-top: 2px solid #EEE;
-    
   }
   
   .chat .footer-chat .icon {
@@ -311,6 +315,7 @@ body {
     height: 50px;
     margin-left: 20px;
     padding: 10px;
+    margin-top: 0;
   }
   
   .footer-chat *::-webkit-input-placeholder {

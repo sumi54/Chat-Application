@@ -3,18 +3,16 @@ import { io } from "socket.io-client";
 //istek
 export const state = reactive({
     connected: false,
-    userId : []
+    userId : [],
+    CurrentUser:[]
   });
   
-  const URL = "http://localhost:3000";
+  const URL = "http://192.168.137.115:3000";
   
   export const socket = io(URL);
   
   socket.on("connect", () => {
     state.connected = true;
-    // socket.emit("userId",socket.id);
-    // console.log(socket.id)
-    // state.userId = socket.id
   //  socket.on('userRegister',(user)=>{
   //   this.userId.push(user);
   //   console.log(this.userId)
@@ -22,6 +20,8 @@ export const state = reactive({
     // socket.emit('userRegister',state.userId)
     
     // socket.on('chat',(msg)=>io.emit('receiver',msg))
+
+    // console.log(socket.id);
   });
   
   socket.on("disconnect", () => {
