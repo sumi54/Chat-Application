@@ -15,13 +15,17 @@ let onlineUsers  = []
 let users=[]
 let messages=[]
 io.on("connection", (socket) => {
+  // **ROOMS
+  // console.log(socket.rooms); (set1)
+  // socket.join("name");
+  // console.log(socket.rooms);(set2)
 
 
   socket.emit('userid',socket.id);
   
-  socket.on("chat_"+socket.id,(message) => {
+  // socket.on("chat_"+socket.id,(message) => {
     
-  })
+  // })
 
   
   socket.on("name",(userName)=>{
