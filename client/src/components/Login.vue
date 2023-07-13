@@ -24,14 +24,6 @@ export default {
   },  
  
   mounted(){
-      // socket.on("userId",user=>{
-      // this.userInfo.onlineUsers.push(user);
-      // });
-    // console.log(this.userInfo)
-
-    // socket.on("disconnectInfo",onlineUsers => {
-      
-    // })
 
     socket.on("userid",(userId) => {
         this.chatStore.setUserId(userId)

@@ -60,8 +60,6 @@ import moment from "moment";
 import {mapState,mapStores} from 'pinia'
 import {useChatStore} from '../stores/chatStore'
 
-// import { useChatStore } from "@/stores/chat.js";
-//   const store = useChatStore();
 export default{
 
   name:'chat',
@@ -82,7 +80,8 @@ export default{
             SenderUser:'',
             time:[],
             CurrentTime:"",
-            onlineUsersId:[]
+            onlineUsersId:[],
+            rooms:"",
         }
     },
     computed : {
@@ -94,14 +93,12 @@ export default{
     methods:{
         postMessage(){  
 
-          
           // this.chatStore.setUserId(44);
           // console.log("Son Hali  => " + this.chatStore.getUserId);
           const timelong=moment().format('HH:mm:ss');
-          this.time=moment().format('HH:mm')
-          
+          this.time=moment().format('HH:mm');
           this.responseArray.push({message:this.messageInput,type:0,time:timelong});
-          socket.emit("chat",this.messageInput); 
+          socket.emit("chat",this.messageInput,this.chatStore.getRoom); 
           this.messageInput='';
         },
         updateTime(){
@@ -109,14 +106,13 @@ export default{
             this.CurrentTime=moment().format('HH:mm:ss');
           })
         },
+
     },
     mounted(){
       socket.on("disconnectInfo",(userId)=>{
-        console.log(userId);
           this.chatStore.onlineusers=this.chatStore.onlineusers.filter(user => user.id != userId)
       })
       
-      console.log(this.chatStore.onlineusers);
       socket.on("nameList",(users)=>{
         this.onlineUsers.push(users);
       })

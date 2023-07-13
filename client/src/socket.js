@@ -7,7 +7,7 @@ export const state = reactive({
     CurrentUser:[]
   });
   
-  const URL = "http://192.168.137.115:3000";
+  const URL = "http://localhost:3000";
   
   export const socket = io(URL);
   

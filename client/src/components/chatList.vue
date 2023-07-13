@@ -6,11 +6,11 @@
               <input type="text" placeholder="Search...">
             </div>
           </div>
-          <div class="discussion message-active" v-for="user in activeUsers" :key="user.id">
+          <div class="discussion message-active" v-for="user in activeUsers" :key="user.id" @click="room(user)" >
             <div class="photo" style="background-image: url(https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);">
               <div class="online"></div>
             </div>
-            <div class="desc-contact" >
+            <div class="desc-contact">
               <p class="name">{{ user.name }}</p>
               <p class="message">9 pm at the bar if possible 😳</p>
             </div>
@@ -90,33 +90,35 @@ export default{
     data(){
       return{
         nameArray:[],
-        filter:[]
+        filter:[],
+        rooms:""
       }
     },
     computed:{
-      ...mapStores(useChatStore),
-      activeUsers(){
-        return this.chatStore.getActiveUsers;
+
+     ...mapStores(useChatStore),
+ 
+     activeUsers(){
+       return this.chatStore.getActiveUsers;
+     }
+
+
+    },
+    methods : {
+      room(user){
+        // console.log(user.id);
+        this.rooms=user.id;
+        this.chatStore.setRoom(this.rooms);
       }
-      
     },
     mounted(){
-      // socket.on("userId",user=>{
-      // this.userInfo.onlineUsers.push(user);
-      // });
-
-      // this.nameArray.push(this.chatStore.getUsers)
-
-      // socket.on("nameList",(users)=>{
-      //     this.chatStore.onlineUsers=users
-      // })
+      
       socket.on("nameList",(users)=>{
         this.chatStore.onlineusers = users.filter(user => user.id != this.chatStore.id);
       })
-      
+      // this.filter.push(this.chatStore.filteredOnlineUsers)
 
-      this.filter.push(this.chatStore.filteredOnlineUsers)
-
-    }
+    },
+    
 }
 </script>
