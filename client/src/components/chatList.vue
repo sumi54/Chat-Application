@@ -109,6 +109,7 @@ export default{
         // console.log(user.id);
         this.rooms=user.id;
         this.chatStore.setRoom(this.rooms);
+        this.chatStore.setUserName(user.name)
       }
     },
     mounted(){

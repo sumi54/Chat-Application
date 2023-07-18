@@ -6,16 +6,16 @@
         <section class="chat">
           <div class="header-chat">
             <i class="icon fa fa-user-o" aria-hidden="true"></i>
-            <p class="name">{{ CurrentUserName }}</p>
+            <p class="name">{{chatStore.getUserName}}</p>
             <i class="icon clickable fa fa-ellipsis-h right" aria-hidden="true"></i>
           </div>
           <div class="messages-chat">
             <!-- <div v-if="responseArray.time>CurrentTime"> -->
-            <div class="message"  v-for="message in messageArray" :key="message">
+            <div class="message"  v-for="message in receivedMessagesFromUser" :key="message">
               <div class="photo" style="background-image: url(https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);">
                 <div class="online"></div>
               </div>
-              <p class="text" ><span :class="{'float-left':message.type===0}">{{ message.message }} </span> </p>
+              <p class="text" ><span :class="{'float-left':message.type===0}">{{ message }} </span> </p>
               
             </div>
             <ul>
@@ -88,7 +88,19 @@ export default{
       connected() {
         return state.connected;
       },
-      ...mapStores(useChatStore)
+      ...mapStores(useChatStore),
+      receivedMessagesFromUser(){
+        let messages = this.chatStore.messages.find(room => room.id == this.chatStore.getRoom)
+
+
+        if(messages === undefined){
+          return []
+        }
+
+        return messages.message
+
+          
+      }
     },
     methods:{
         postMessage(){  
@@ -98,7 +110,12 @@ export default{
           const timelong=moment().format('HH:mm:ss');
           this.time=moment().format('HH:mm');
           this.responseArray.push({message:this.messageInput,type:0,time:timelong});
-          socket.emit("chat",this.messageInput,this.chatStore.getRoom); 
+
+          
+          this.chatStore.setMessages(this.messageInput,this.chatStore.getRoom)
+
+          socket.emit("private_message",this.messageInput,this.chatStore.getRoom); 
+
           this.messageInput='';
         },
         updateTime(){
@@ -123,14 +140,17 @@ export default{
           }
       });
       this.updateTime();
-    
-    socket.on("chat",(message,id)=>{
-      const timelong=moment().format('HH:mm:ss');
-      this.time=moment().format('HH:mm');
-      this.CurrentUser=socket.id;
-        this.messageArray.push({message:message,type:1,time:timelong,CurrentUser:id});
-    });
-    this.onlineUsersId.push(this.chatStore.getUserId);
+      
+      socket.on("chat",({socketId,message})=>{
+
+
+        this.chatStore.setMessages(message,socketId)
+        // const timelong=moment().format('HH:mm:ss');
+        // this.time=moment().format('HH:mm');
+        // this.CurrentUser=socket.id;
+        // this.responseArray.push({message:message,type:1,time:timelong,CurrentUser:id});
+      });
+      this.onlineUsersId.push(this.chatStore.getUserId);
 
     }
 };

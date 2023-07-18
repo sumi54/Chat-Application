@@ -3,7 +3,7 @@
     <div class="col">
       <div class="form-floating mb-3 login">
         <input type="text" class="col-sm-7 form-control " id="floatingInput" placeholder="Name..." v-model="nameInput" v-on:keyup.enter="gotoChat">
-        <button @click="gotoChat" class="btn btn-primary col-sm-5 login-btn">Chat sohbetine gir!</button>
+        <button @click="gotoChat" class="btn btn-primary col-sm-5 login-btn">Join To Chat!</button>
       </div>
     </div>
   </div>   
@@ -38,7 +38,6 @@ export default {
       }else{
         router.push('/chat')
         socket.emit("name",this.nameInput); //gönderiyo
-        
       }
 
     }

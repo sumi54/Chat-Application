@@ -20,14 +20,16 @@ export const useChatStore = defineStore("chat",{
     //         ]
     //     }
     // ]
-
+    //herkesin id'sini buraya koy ve o id'ye atılan mesajları da al
     
     state: () => {
         return{
             onlineusers: [],
             id: [],
-            messages : [],
-            room:[]
+            messages:[],
+            room:[],
+            name:"",
+            
         }
     },
     getters : {
@@ -40,6 +42,13 @@ export const useChatStore = defineStore("chat",{
         },
         getRoom(state){
             return state.room
+            
+        },
+        getUserName(state){
+            return state.name
+        },
+        getMessages(state){
+            return state.messages
         }
         
     },
@@ -49,6 +58,28 @@ export const useChatStore = defineStore("chat",{
         },
         setRoom(userid){
             this.room=userid
+        },
+        setUserName(userName){
+            this.name=userName
+        },
+        setMessages(message,roomId){
+
+            let room = this.messages.find(room => room.id == roomId)
+
+            if(room){
+                room.message.push(message)
+            }else{
+                this.messages.push({
+                    id : roomId,
+                    message : [message]
+                })
+            }
+
+            console.log(this.messages);
+
+            // console.log('ASD');
+            // console.log(room);
+            // console.log(this.messages);
         }
     }
 

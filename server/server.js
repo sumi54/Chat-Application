@@ -1,3 +1,4 @@
+import { ChildProcess } from "child_process";
 import { response } from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
@@ -35,9 +36,12 @@ io.on("connection", (socket) => {
     
     io.emit("nameList",onlineUsers);
   })
+  console.log(onlineUsers);
 
-  socket.on("chat",(message,room)=>{
-    socket.to(room).emit("chat",message); 
+  socket.on("private_message",(message,room)=>{
+    
+    socket.to(room).emit("chat",{socketId : socket.id,message}); 
+
   })
   socket.on("disconnect",() => {
 
