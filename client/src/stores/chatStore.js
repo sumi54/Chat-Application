@@ -76,8 +76,6 @@ export const useChatStore = defineStore("chat",{
             }
 
             console.log(this.messages);
-
-            // console.log('ASD');
             // console.log(room);
             // console.log(this.messages);
         }
