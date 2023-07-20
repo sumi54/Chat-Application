@@ -12,32 +12,18 @@
           <div class="messages-chat">
             <!-- <div v-if="responseArray.time>CurrentTime"> -->
               <!-- v-show="chatStore.getUserId !== chatStore.getRoom" -->
-          <div>
-            <div class="message"  v-for="message in receivedMessagesFromUser" :key="message">
-              <div class="photo" style="background-image: url(https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);">
-                <div class="online"></div>
+            <div v-for="message in receivedMessagesFromUser"  :key="message">
+              <div class="message" :class="{'text-only' : message.from == false  }">
+                <div class="photo" style="background-image: url(https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);" v-if="message.from">
+                  <div class="online"></div>
+                </div>
+                <div :class="{'response' : message.from == false}">
+                  <p  class="text"> {{ message.content }} </p>
+                </div>
               </div>
-              <p class="text" ><span :class="{'float-left':message.type===0}">{{ message }} </span> </p>
+              <p class="time" :class="{'text-right' : message.from == false}"> {{time}}</p>
             </div>
-          </div>
-            <ul>
-            <li v-for="user in users" :key="user.id">{{ user.name }}</li>
-            </ul>
-            <p class="time"> {{time}}</p>
-             <!-- <div class="message text-only">
-              <p class="text"> What are you doing tonight ? Want to go take a drink ?</p>
-            </div>   -->
-            <!-- {{ connected }} -->
-            <p v-for="id in onlineUsersId" :key="id">{{ id }}</p>
-            
-          <!-- </div> -->
-            <!-- <div v-else> -->
-            <div class="message message-response" v-for="message in responseArray" :key="message">
-              <div class="response">
-                <p  class="text"> <span :class="{'float-right':message.type===1}">{{ message.message }} </span></p>
-              </div>
-              <p class="time time-response"> {{ time }}</p>
-            </div>
+
           </div>
           <!-- </div> -->
           <div class="footer-chat">
@@ -92,6 +78,7 @@ export default{
       },
       ...mapStores(useChatStore),
       receivedMessagesFromUser(){
+
         let messages = this.chatStore.messages.find(room => room.id == this.chatStore.getRoom)
 
         if(messages === undefined){
@@ -100,19 +87,24 @@ export default{
         return messages.message
        },
 
-
     },
     methods:{
         postMessage(){  
           // this.chatStore.setUserId(44);
           // console.log("Son Hali  => " + this.chatStore.getUserId);
-          const timelong=moment().format('HH:mm:ss');
-          this.time=moment().format('HH:mm');
-          this.responseArray.push({message:this.messageInput,type:0,time:timelong});
-          this.chatStore.setMessages(this.messageInput)
-          console.log(this.socId);
-          socket.emit("private_message",this.messageInput,this.chatStore.getRoom); 
-          this.messageInput='';
+          if(this.chatStore.getRoom==""){
+            alert("Sohbet edeceğiniz kişiyi seçmediniz...");
+          }else{
+            const timelong=moment().format('HH:mm:ss');
+            this.time=moment().format('HH:mm');
+            this.responseArray.push({message:this.messageInput,type:0,time:timelong});
+            this.responseArray=this.responseArray
+            
+            this.chatStore.setMessages(this.messageInput,this.chatStore.getRoom,false)
+            socket.emit("private_message",this.messageInput,this.chatStore.getRoom); 
+            this.messageInput='';
+          }
+          
         },
         updateTime(){
           setInterval(()=>{
@@ -138,13 +130,18 @@ export default{
       this.updateTime();
       
       socket.on("chat",({socketId,message})=>{
-        this.chatStore.setMessages(message,socketId);
-        this.socId=socketId;
+
+        if(socketId != this.chatStore.getUserId){
+          this.chatStore.setMessages(message,socketId,true);
+          this.socId = socketId;
+        }
+        
         // const timelong=moment().format('HH:mm:ss');
         // this.time=moment().format('HH:mm');
         // this.CurrentUser=socket.id;
         // this.responseArray.push({message:message,type:1,time:timelong,CurrentUser:id});
       });
+
       this.onlineUsersId.push(this.chatStore.getUserId);
 
     }
@@ -155,6 +152,7 @@ export default{
 .message-response{
   flex-direction: column;
 }
+
 .time-response{
   margin-left: 80% !important;
 }

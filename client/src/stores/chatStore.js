@@ -62,21 +62,27 @@ export const useChatStore = defineStore("chat",{
         setUserName(userName){
             this.name=userName
         },
-        setMessages(message,roomId){
+        setMessages(message,roomId,from){
 
             let room = this.messages.find(room => room.id == roomId)
 
             if(room){
-                room.message.push(message)
+                room.message.push({
+                    content : message,
+                    from : from
+                })
             }else{
                 this.messages.push({
                     id : roomId,
-                    message : [message]
+                    message : [
+                        {
+                            content : message,
+                            from : from
+                        }
+                    ]
                 })
             }
 
-            console.log(this.messages);
-            // console.log(room);
             // console.log(this.messages);
         }
     }

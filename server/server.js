@@ -39,8 +39,10 @@ io.on("connection", (socket) => {
   console.log(onlineUsers);
 
   socket.on("private_message",(message,room)=>{
+
+      socket.to(room).emit("chat",{socketId : socket.id,message}); 
     
-    socket.to(room).emit("chat",{socketId : socket.id,message}); 
+    
   })
   socket.on("disconnect",() => {
 
