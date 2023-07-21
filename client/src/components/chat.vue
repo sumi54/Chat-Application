@@ -9,6 +9,7 @@
             <p class="name">{{chatStore.getUserName}}</p>
             <i class="icon clickable fa fa-ellipsis-h right" aria-hidden="true"></i>
           </div>
+          
           <div class="messages-chat">
             <!-- <div v-if="responseArray.time>CurrentTime"> -->
               <!-- v-show="chatStore.getUserId !== chatStore.getRoom" -->
@@ -23,7 +24,6 @@
               </div>
               <p class="time" :class="{'text-right' : message.from == false}"> {{time}}</p>
             </div>
-
           </div>
           <!-- </div> -->
           <div class="footer-chat">
@@ -130,6 +130,9 @@ export default{
       this.updateTime();
       
       socket.on("chat",({socketId,message})=>{
+        const timelong=moment().format('HH:mm:ss');
+        this.time=moment().format('HH:mm');
+        this.responseArray.push({message:this.messageInput,type:1,time:timelong});
 
         if(socketId != this.chatStore.getUserId){
           this.chatStore.setMessages(message,socketId,true);
@@ -149,10 +152,22 @@ export default{
 
 </script>
 <style>
-.message-response{
-  flex-direction: column;
+
+
+.container{
+  border-collapse: collapse;
+  /* background-color: #da1515; */
 }
 
+/* .messages-chat{
+  position: relative !important;
+  z-index: 2;
+  overflow: scroll !important;
+} */
+.messages-chat{
+  max-height: 71% !important;
+  overflow-y: scroll !important;
+}
 .time-response{
   margin-left: 80% !important;
 }

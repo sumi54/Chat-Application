@@ -2,25 +2,6 @@ import {defineStore} from 'pinia';
 
 export const useChatStore = defineStore("chat",{
 
-
-    // messages: [
-    //     {
-    //         id : "123456",
-    //         messages : [
-    //             "selam",
-    //             "deneme"
-    //         ]
-    //     },
-    //     {
-    //         id : "46677",
-    //         message : [
-    //             "asdasd",
-    //             "sdfsdf",
-    //             "son mesaj"
-    //         ]
-    //     }
-    // ]
-    //herkesin id'sini buraya koy ve o id'ye atılan mesajları da al
     
     state: () => {
         return{
