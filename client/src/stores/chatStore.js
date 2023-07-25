@@ -10,6 +10,8 @@ export const useChatStore = defineStore("chat",{
             messages:[],
             room:[],
             name:"",
+            CurrentUser:"",
+            CurrentId:""
             
         }
     },
@@ -30,6 +32,12 @@ export const useChatStore = defineStore("chat",{
         },
         getMessages(state){
             return state.messages
+        },
+        getCurrentUser(state){
+            return state.CurrentUser
+        },
+        getCurrentId(state){
+            return state.CurrentId
         }
         
     },
@@ -43,14 +51,15 @@ export const useChatStore = defineStore("chat",{
         setUserName(userName){
             this.name=userName
         },
-        setMessages(message,roomId,from){
+        setMessages(message,roomId,from,isRead){
 
             let room = this.messages.find(room => room.id == roomId)
 
             if(room){
                 room.message.push({
                     content : message,
-                    from : from
+                    from : from,
+                    isRead : isRead
                 })
             }else{
                 this.messages.push({
@@ -58,13 +67,20 @@ export const useChatStore = defineStore("chat",{
                     message : [
                         {
                             content : message,
-                            from : from
+                            from : from,
+                            isRead : isRead
                         }
                     ]
                 })
             }
 
             // console.log(this.messages);
+        },
+        setCurrentUser(name){
+            this.CurrentUser=name
+        },
+        setCurrentId(id){
+            this.CurrentId=id
         }
     }
 

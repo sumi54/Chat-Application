@@ -11,8 +11,8 @@
           </div>
           
           <div class="messages-chat">
-            <!-- <div v-if="responseArray.time>CurrentTime"> -->
               <!-- v-show="chatStore.getUserId !== chatStore.getRoom" -->
+            <div class="scroll">
             <div v-for="message in receivedMessagesFromUser"  :key="message">
               <div class="message" :class="{'text-only' : message.from == false  }">
                 <div class="photo" style="background-image: url(https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);" v-if="message.from">
@@ -24,6 +24,7 @@
               </div>
               <p class="time" :class="{'text-right' : message.from == false}"> {{time}}</p>
             </div>
+          </div>
           </div>
           <!-- </div> -->
           <div class="footer-chat">
@@ -59,7 +60,6 @@ export default{
         return{
             messageInput:'',
             messageArray:[],
-            responseArray:[],
             CurrentUserName : '',
             onlineUsers:[],
             nameArray:[],
@@ -94,17 +94,17 @@ export default{
           // console.log("Son Hali  => " + this.chatStore.getUserId);
           if(this.chatStore.getRoom==""){
             alert("Sohbet edeceğiniz kişiyi seçmediniz...");
-          }else{
+          }else if(this.messageInput == ""){
+            alert("Mesaj alanı boş bırakılamaz.")
+          }
+          else{
             const timelong=moment().format('HH:mm:ss');
             this.time=moment().format('HH:mm');
-            this.responseArray.push({message:this.messageInput,type:0,time:timelong});
-            this.responseArray=this.responseArray
             
-            this.chatStore.setMessages(this.messageInput,this.chatStore.getRoom,false)
+            this.chatStore.setMessages(this.messageInput,this.chatStore.getRoom,false,true)
             socket.emit("private_message",this.messageInput,this.chatStore.getRoom); 
             this.messageInput='';
           }
-          
         },
         updateTime(){
           setInterval(()=>{
@@ -132,17 +132,16 @@ export default{
       socket.on("chat",({socketId,message})=>{
         const timelong=moment().format('HH:mm:ss');
         this.time=moment().format('HH:mm');
-        this.responseArray.push({message:this.messageInput,type:1,time:timelong});
-
+        this.chatStore.setCurrentId(socketId);
         if(socketId != this.chatStore.getUserId){
-          this.chatStore.setMessages(message,socketId,true);
-          this.socId = socketId;
+
+          let isRead =socketId == this.chatStore.getRoom 
+
+          this.chatStore.setMessages(message,socketId,true,isRead);
+
+
         }
         
-        // const timelong=moment().format('HH:mm:ss');
-        // this.time=moment().format('HH:mm');
-        // this.CurrentUser=socket.id;
-        // this.responseArray.push({message:message,type:1,time:timelong,CurrentUser:id});
       });
 
       this.onlineUsersId.push(this.chatStore.getUserId);
@@ -158,17 +157,19 @@ export default{
   border-collapse: collapse;
   /* background-color: #da1515; */
 }
-
-/* .messages-chat{
-  position: relative !important;
-  z-index: 2;
-  overflow: scroll !important;
-} */
-.messages-chat{
-  max-height: 71% !important;
-  overflow-y: scroll !important;
+.chat{
+  overflow: hidden !important;
 }
+.messages-chat{
+  height: 72% ;
+  overflow-y: scroll;
+  max-height: 40em ;
+}
+
 .time-response{
-  margin-left: 80% !important;
+  margin-left: 90% !important;
+}
+::-webkit-scrollbar-track{
+  max-height: 50%;
 }
 </style>

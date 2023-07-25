@@ -1,9 +1,12 @@
 <template>
     <section class="discussions">
           <div class="discussion search">
-            <div class="searchbar">
+            <!-- <div class="searchbar">
               <i class="fa fa-search" aria-hidden="true"></i>
               <input type="text" placeholder="Search...">
+            </div> -->
+            <div class="CurrentUser">
+              <h1 class="name">Hoş Geldin {{ chatStore.getCurrentUser }}</h1>
             </div>
           </div>
           <div class="discussion message-active" v-for="user in activeUsers" :key="user.id" @click="room(user)" >
@@ -12,7 +15,9 @@
             </div>
             <div class="desc-contact">
               <p class="name">{{ user.name }}</p>
-              <p class="message">9 pm at the bar if possible 😳</p>
+              <div @click="read(user.id)"><p class="name" >{{ unreadMessages(user.id) }}</p></div>
+              
+              <!-- <p class="message">9 pm at the bar if possible 😳</p> -->
             </div>
             <div class="timer">12 sec</div>
           </div>
@@ -91,7 +96,8 @@ export default{
       return{
         nameArray:[],
         filter:[],
-        rooms:""
+        rooms:"",
+        clicked:false,
       }
     },
     computed:{
@@ -100,17 +106,50 @@ export default{
  
      activeUsers(){
        return this.chatStore.getActiveUsers;
-     }
-
+     },
 
     },
     methods : {
+      unreadMessages(userRoomId){
+        let messages = this.chatStore.messages
+        let current = this.chatStore.getCurrentId
+        let room = this.chatStore.getRoom
+        let fromMessage = messages.find(from => from.id == userRoomId )
+        let unreadMessages = []
+          if(fromMessage){
+            fromMessage.message.forEach(function(message){
+              if(!message.isRead){
+                unreadMessages.push({...message}) 
+              }
+            })
+          }
+
+         return unreadMessages.length
+      
+      },
+
       room(user){
         // console.log(user.id);
-        this.rooms=user.id;
-        this.chatStore.setRoom(this.rooms);
-        this.chatStore.setUserName(user.name)
+        // this.rooms=user.id;
+        let userId = user.id
+        let current = this.chatStore.getCurrentId
+        let messages = this.chatStore.messages
+
+        let fromMessage = messages.find(from => from.id == userId )
+        if(fromMessage){
+          fromMessage.message.forEach(function(message){
+          
+            if(message.isRead==false){
+              
+                message.isRead=true;
+            }
+          })
       }
+        this.clicked=true
+        this.chatStore.setRoom(userId);
+        this.chatStore.setUserName(user.name)
+      },
+      
     },
     mounted(){
       
@@ -118,8 +157,14 @@ export default{
         this.chatStore.onlineusers = users.filter(user => user.id != this.chatStore.id);
       })
       // this.filter.push(this.chatStore.filteredOnlineUsers)
-
     },
-    
+
 }
 </script>
+<style>
+.CurrentUser 
+.name{
+  font-family: 'Montserrat', sans-serif;
+  text-transform: uppercase;
+}
+</style>
