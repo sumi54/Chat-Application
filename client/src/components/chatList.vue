@@ -15,11 +15,11 @@
             </div>
             <div class="desc-contact">
               <p class="name">{{ user.name }}</p>
-              <div @click="read(user.id)"><p class="name" >{{ unreadMessages(user.id) }}</p></div>
+              <!-- <div @click="read(user.id)"><p class="name" ></p></div> -->
               
               <!-- <p class="message">9 pm at the bar if possible 😳</p> -->
             </div>
-            <div class="timer">12 sec</div>
+            <div class="timer">{{ unreadMessages(user.id) }}</div>
           </div>
           <!-- <div v-for="fil in filter" :key="fil.id">{{ fil }}</div> -->
           <!-- <div class="discussion">
@@ -166,5 +166,11 @@ export default{
 .name{
   font-family: 'Montserrat', sans-serif;
   text-transform: uppercase;
+}
+.timer{
+  padding: 4px 9px !important;
+  /* margin-left: 11% !important; */
+  background-color: #6780cc;
+  color: white;
 }
 </style>
