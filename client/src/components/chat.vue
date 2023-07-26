@@ -12,7 +12,7 @@
           
           <div class="messages-chat">
               <!-- v-show="chatStore.getUserId !== chatStore.getRoom" -->
-            <div class="scroll">
+            <div class="scroll" >
             <div v-for="message in receivedMessagesFromUser"  :key="message">
               <div class="message" :class="{'text-only' : message.from == false  }">
                 <div class="photo" style="background-image: url(https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);" v-if="message.from">
@@ -47,7 +47,8 @@ import moment from "moment";
 
 import {mapState,mapStores} from 'pinia'
 import {useChatStore} from '../stores/chatStore'
-
+import Ring from '../audio/balon-3.mp3'
+let audio =new Audio (Ring);
 export default{
 
   name:'chat',
@@ -69,7 +70,9 @@ export default{
             CurrentTime:"",
             onlineUsersId:[],
             rooms:"",
-            socId:""
+            socId:"",
+            ringSoundOn:false
+
         }
     },
     computed : {
@@ -133,8 +136,10 @@ export default{
         const timelong=moment().format('HH:mm:ss');
         this.time=moment().format('HH:mm');
         this.chatStore.setCurrentId(socketId);
+            audio.play();
         if(socketId != this.chatStore.getUserId){
 
+          
           let isRead =socketId == this.chatStore.getRoom 
 
           this.chatStore.setMessages(message,socketId,true,isRead);
