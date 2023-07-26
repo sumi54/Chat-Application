@@ -11,7 +11,6 @@
           </div>
           
           <div class="messages-chat">
-              <!-- v-show="chatStore.getUserId !== chatStore.getRoom" -->
             <div class="scroll" >
             <div v-for="message in receivedMessagesFromUser"  :key="message">
               <div class="message" :class="{'text-only' : message.from == false  }">
@@ -93,8 +92,7 @@ export default{
     },
     methods:{
         postMessage(){  
-          // this.chatStore.setUserId(44);
-          // console.log("Son Hali  => " + this.chatStore.getUserId);
+
           if(this.chatStore.getRoom==""){
             alert("Sohbet edeceğiniz kişiyi seçmediniz...");
           }else if(this.messageInput == ""){

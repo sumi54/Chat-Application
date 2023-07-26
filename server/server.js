@@ -23,16 +23,12 @@ io.on("connection", (socket) => {
 
 
   socket.emit('userid',socket.id);
-  
-  // socket.on("chat_"+socket.id,(message) => {
-  // })
 
   socket.on("name",(userName)=>{
     onlineUsers.push({
       "id" : socket.id,
       "name" : userName
     })
-    // io.emit("userid",socket.id);
     
     io.emit("nameList",onlineUsers);
   })
