@@ -80,9 +80,7 @@ export default{
       },
       ...mapStores(useChatStore),
       receivedMessagesFromUser(){
-
         let messages = this.chatStore.messages.find(room => room.id == this.chatStore.getRoom)
-
         if(messages === undefined){
           return []
         }
@@ -112,7 +110,6 @@ export default{
             this.CurrentTime=moment().format('HH:mm:ss');
           })
         },
-
     },
     mounted(){
       socket.on("disconnectInfo",(userId)=>{
@@ -136,12 +133,8 @@ export default{
         this.chatStore.setCurrentId(socketId);
             audio.play();
         if(socketId != this.chatStore.getUserId){
-
-          
           let isRead =socketId == this.chatStore.getRoom 
-
           this.chatStore.setMessages(message,socketId,true,isRead);
-
 
         }
         

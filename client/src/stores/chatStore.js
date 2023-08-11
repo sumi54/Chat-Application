@@ -52,9 +52,7 @@ export const useChatStore = defineStore("chat",{
             this.name=userName
         },
         setMessages(message,roomId,from,isRead){
-
             let room = this.messages.find(room => room.id == roomId)
-
             if(room){
                 room.message.push({
                     content : message,
@@ -73,8 +71,6 @@ export const useChatStore = defineStore("chat",{
                     ]
                 })
             }
-
-            // console.log(this.messages);
         },
         setCurrentUser(name){
             this.CurrentUser=name

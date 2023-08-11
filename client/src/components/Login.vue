@@ -36,16 +36,14 @@ export default {
         alert("İsim alanını boş bırakmayınız...")
 
       }else if(this.nameInput.length>20){
-        alert("12 harften daha fazla giremezsiniz")
+        alert("20 harften daha fazla giremezsiniz")
       }
       else{
         router.push('/chat')
         socket.emit("name",this.nameInput); //gönderiyo
         this.chatStore.setCurrentUser(this.nameInput);
       }
-
     }
-
   },
   computed : {
     ...mapStores(useChatStore)

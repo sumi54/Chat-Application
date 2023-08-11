@@ -112,8 +112,6 @@ export default{
     methods : {
       unreadMessages(userRoomId){
         let messages = this.chatStore.messages
-        let current = this.chatStore.getCurrentId
-        let room = this.chatStore.getRoom
         let fromMessage = messages.find(from => from.id == userRoomId )
         let unreadMessages = []
           if(fromMessage){
@@ -123,16 +121,14 @@ export default{
               }
             })
           }
-
          return unreadMessages.length
-      
       },
 
       room(user){
         // console.log(user.id);
         // this.rooms=user.id;
+        // let current = this.chatStore.getCurrentId
         let userId = user.id
-        let current = this.chatStore.getCurrentId
         let messages = this.chatStore.messages
 
         let fromMessage = messages.find(from => from.id == userId )
@@ -152,11 +148,9 @@ export default{
       
     },
     mounted(){
-      
       socket.on("nameList",(users)=>{
         this.chatStore.onlineusers = users.filter(user => user.id != this.chatStore.id);
       })
-      // this.filter.push(this.chatStore.filteredOnlineUsers)
     },
 
 }
